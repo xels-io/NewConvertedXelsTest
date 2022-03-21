@@ -5,12 +5,13 @@ using NBitcoin;
 using NBitcoin.BouncyCastle.Math;
 using NBitcoin.DataEncoders;
 using NBitcoin.Protocol;
+using Xels.Bitcoin.Features.PoA;
 using Xels.Bitcoin.Networks.Deployments;
 using Xels.Bitcoin.Networks.Policies;
 
 namespace Xels.Bitcoin.Networks
 {
-    public class StraxMain : Network
+    public class StraxMain : PoANetwork
     {
         public StraxMain()
         {

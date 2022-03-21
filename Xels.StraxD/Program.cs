@@ -14,6 +14,9 @@ using Xels.Bitcoin.Features.MemoryPool;
 using Xels.Bitcoin.Features.Miner;
 using Xels.Bitcoin.Features.RPC;
 using Xels.Bitcoin.Features.SignalR;
+using Xels.Bitcoin.Features.SmartContracts;
+using Xels.Bitcoin.Features.SmartContracts.PoA;
+using Xels.Bitcoin.Features.SmartContracts.Wallet;
 using Xels.Bitcoin.Networks;
 using Xels.Bitcoin.Utilities;
 using Xels.Features.Diagnostic;
@@ -41,11 +44,19 @@ namespace Xels.StraxD
                 IFullNodeBuilder nodeBuilder = new FullNodeBuilder()
                     .UseNodeSettings(nodeSettings, dbType)
                     .UseBlockStore(dbType)
-                    .UsePosConsensus(dbType)
                     .UseMempool()
+                    //.UsePosConsensus(dbType)
+                    .AddSmartContracts(options =>
+                    {
+                        options.UseReflectionExecutor();
+                        options.UsePoAWhitelistedContracts();
+                    })
+                    .AddPoAFeature()
+                    .UsePoAConsensus(dbType)
+                    .UseSmartContractWallet()
                     .UseColdStakingWallet()
                     .AddSQLiteWalletRepository()
-                    .AddPowPosMining(true)
+                    //.AddPowPosMining(true)
                     .UseApi()
                     .UseUnity3dApi()
                     .AddRPC()
