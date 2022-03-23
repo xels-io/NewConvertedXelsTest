@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using NBitcoin;
 using NBitcoin.BouncyCastle.Math;
@@ -14,7 +15,7 @@ namespace Xels.Bitcoin.Networks
     {
         public StraxMain()
         {
-            this.Name = "StraxMain";
+            this.Name = "XlcMain";
             this.NetworkType = NetworkType.Mainnet;
             this.Magic = BitConverter.ToUInt32(Encoding.ASCII.GetBytes("StrX"));
             this.DefaultPort = 17105;
@@ -30,45 +31,33 @@ namespace Xels.Bitcoin.Networks
             this.RootFolderName = StraxNetwork.StraxRootFolderName;
             this.DefaultConfigFilename = StraxNetwork.StraxDefaultConfigFilename;
             this.MaxTimeOffsetSeconds = 25 * 60;
-            this.CoinTicker = "STRAX";
+            this.CoinTicker = "XLC";
             this.DefaultBanTimeSeconds = 11250; // 500 (MaxReorg) * 45 (TargetSpacing) / 2 = 3 hours, 7 minutes and 30 seconds
 
-            this.CirrusRewardDummyAddress = "CPqxvnzfXngDi75xBJKqi4e6YrFsinrJka"; // Cirrus main address
+            this.CirrusRewardDummyAddress = "CKe36GSqPx3EasYY9FevtLSnyx5nryojaN"; // Cirrus main address
             this.RewardClaimerBatchActivationHeight = 119_200; // Tuesday, 12 January 2021 9:00:00 AM (Estimated)
             this.RewardClaimerBlockInterval = 100;
 
-            this.ConversionTransactionFeeDistributionDummyAddress = "CXK1AhmK8XhmBWHUrCKRt5WMhz1CcYeguF";
+            this.ConversionTransactionFeeDistributionDummyAddress = "CKe36GSqPx3EasYY9FevtLSnyx5nryojaN";
 
             // To successfully process the OP_FEDERATION opcode the federations should be known.
             this.Federations = new Federations();
             this.Federations.RegisterFederation(new Federation(new[]
             {
-                new PubKey("03797a2047f84ba7dcdd2816d4feba45ae70a59b3aa97f46f7877df61aa9f06a21"),
-                new PubKey("0209cfca2490dec022f097114090c919e85047de0790c1c97451e0f50c2199a957"),
-                new PubKey("032e4088451c5a7952fb6a862cdad27ea18b2e12bccb718f13c9fdcc1caf0535b4"),
-                new PubKey("035bf78614171397b080c5b375dbb7a5ed2a4e6fb43a69083267c880f66de5a4f9"),
-                new PubKey("02387a219b1de54d4dc73a710a2315d957fc37ab04052a6e225c89205b90a881cd"),
-                new PubKey("028078c0613033e5b4d4745300ede15d87ed339e379daadc6481d87abcb78732fa"),
-                new PubKey("02b3e16d2e4bbad6dba1e699934a52d58d9b60b6e7eed303e400e95f2dbc2ef3fd"),
-                new PubKey("02ba8b842997ce50c8e29c24a5452de5482f1584ae79778950b7bae24d4cc68dad"),
-                new PubKey("02cbd907b0bf4d757dee7ea4c28e63e46af19dc8df0c924ee5570d9457be2f4c73"),
-                new PubKey("02d371f3a0cffffcf5636e6d4b79d9f018a1a18fbf64c39542b382c622b19af9de"),
-                new PubKey("02f891910d28fc26f272da8d7f548fdc18c286704907673e839dc07e8df416c15e"),
-                new PubKey("0337e816a3433c71c4bbc095a54a0715a6da7a70526d2afb8dba3d8d78d33053bf"),
-                new PubKey("035569e42835e25c854daa7de77c20f1009119a5667494664a46b5154db7ee768a"),
-                new PubKey("03cda7ea577e8fbe5d45b851910ec4a795e5cc12d498cf80d39ba1d9a455942188"),
-                new PubKey("02680321118bce869933b07ea42cc04d2a2804134b06db582427d6b9688b3536a4")}));
+                new PubKey("02b5ae6ae2997c33ad728d5a65a91c212789c3bd61015db5675d487020ba5bfe0d"),
+                new PubKey("021335d02d35b21527b1db28d1bd37cb4376700aa77709eb7106ebb56b221b9395"),
+                new PubKey("037e7aa5e9dd41de242a842530e893c256bd76234708d44081e5baabd39d411cc7")}));
 
             var consensusFactory = new PosConsensusFactory();
 
             // Create the genesis block.
-            this.GenesisTime = 1604913812; // ~9 November 2020 - https://www.unixtimestamp.com/
-            this.GenesisNonce = 747342; // Set to 1 until correct value found
+            this.GenesisTime = Utils.DateTimeToUnixTime(new DateTimeOffset(2021, 04, 14, 0, 0, 0, TimeSpan.Zero)); //1609459200;1604913812; // ~9 November 2020 - https://www.unixtimestamp.com/
+            this.GenesisNonce = 2553536; // Set to 1 until correct value found
             this.GenesisBits = 0x1e0fffff; // The difficulty target
             this.GenesisVersion = 536870912; // 'Empty' BIP9 deployments as they are all activated from genesis already
             this.GenesisReward = Money.Zero;
 
-            Block genesisBlock = StraxNetwork.CreateGenesisBlock(consensusFactory, this.GenesisTime, this.GenesisNonce, this.GenesisBits, this.GenesisVersion, this.GenesisReward, "stratisplatform.com/2020/09/25/introducing-strax/");
+            Block genesisBlock = StraxNetwork.CreateGenesisBlock(consensusFactory, this.GenesisTime, this.GenesisNonce, this.GenesisBits, this.GenesisVersion, this.GenesisReward, "There is hope yet! We all need to work together. WE GOT THIS!!!");
 
             this.Genesis = genesisBlock;
 
@@ -113,22 +102,22 @@ namespace Xels.Bitcoin.Networks
                 maxReorgLength: 500,
                 defaultAssumeValid: null, // TODO: Set this once some checkpoint candidates have elapsed
                 maxMoney: long.MaxValue,
-                coinbaseMaturity: 50,
-                premineHeight: 2,
-                premineReward: Money.Coins(124987850),
-                proofOfWorkReward: Money.Coins(18),
+                coinbaseMaturity: 5,
+                premineHeight: 1,
+                premineReward: Money.Coins(21000000),
+                proofOfWorkReward: Money.Coins(50),
                 powTargetTimespan: TimeSpan.FromSeconds(14 * 24 * 60 * 60),
-                targetSpacing: TimeSpan.FromSeconds(45),
+                targetSpacing: TimeSpan.FromSeconds(150),
                 powAllowMinDifficultyBlocks: false,
                 posNoRetargeting: false,
                 powNoRetargeting: false,
                 powLimit: new Target(new uint256("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")),
                 minimumChainWork: null,
                 isProofOfStake: true,
-                lastPowBlock: 675,
+                lastPowBlock: int.MaxValue - 100,
                 proofOfStakeLimit: new BigInteger(uint256.Parse("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff").ToBytes(false)),
                 proofOfStakeLimitV2: new BigInteger(uint256.Parse("000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffff").ToBytes(false)),
-                proofOfStakeReward: Money.Coins(18)
+                proofOfStakeReward: Money.Coins(100)
             );
 
             this.Consensus.PosEmptyCoinbase = false;
@@ -149,41 +138,28 @@ namespace Xels.Bitcoin.Networks
 
             this.Checkpoints = new Dictionary<int, CheckpointInfo>
             {
-                { 0, new CheckpointInfo(new uint256("0xebe158d09325c470276619ebc5f7f87c98c0ed4b211c46a17a6457655811d082"), new uint256("0x0000000000000000000000000000000000000000000000000000000000000000")) },
-                { 2, new CheckpointInfo(new uint256("0xbaf2cff34756724b211c6adbe77eb22b3c7896a2773b89a97dd5fc2ddf28d6c2"), new uint256("0xe3ee3d02e12d8819a01f66ac67a7a41547cd5d19a5bc7392bf415308c6960aab")) }, // Premine
-                { 50, new CheckpointInfo(new uint256("0x1ad414cd58cb74fc8c41fcfb0f207aebd3d5fed82f59609746779c39168adedc"), new uint256("0x0aa31c4bac4bdea08a65a08b579f210d8df28a15005a65c3a8edfc6f6428038e")) },
-                { 70, new CheckpointInfo(new uint256("0x7ec7a9cd1ee45ff140bc4c0c1becc6809916b99fac3fae42e6e2c8e70d987259"), new uint256("0x6efbb2d43e885cbc90dc7dfe2b781fc6a4d8a64bd77201de593d25307a7401ce")) },
-                { 100, new CheckpointInfo(new uint256("0x00bc48e8eae5b053e0d48b42997d637e8b36816c311339eb7e36c6eaca6f4674"), new uint256("0x0ad1e1ea9c0b8c90ff67b286cee07f25c9f1552b3749461e66c3ed2f4cd18d54")) },
-                { 500, new CheckpointInfo(new uint256("0xf88ead17d09223d914e5bdca27f27ff861c4c1e5bfb4ab3bc4a4627d4ddd442a"), new uint256("0xf6ea71dcc38a4dbf6c66dd1d3e54568269d6f7cd411c15304de6fce5394a9702")) },
-                { 800, new CheckpointInfo(new uint256("0x3bb02167ae32be4915c1a78150d5fc7ed9924be00c57c6e9693d7603d94970dc"), new uint256("0x995ff9e10f2ef8cddae35a9c40237bdd48fd7bc9982955d9aac50ee32d69d097")) },
-                { 1500, new CheckpointInfo(new uint256("0x0d28f45849a2e535a7ef72690fc49fc9a5c101494c5d5753fdeb1ac121ffb120"), new uint256("0x4a8a47deb226784606625bc4fd545bfaf5aa314c4a20076185cb86e524a36173")) },
-                { 10_000, new CheckpointInfo(new uint256("0xc1c4b7d64b6669d32493c0ed08b42a8f193e07590a95f76a9212a86dc66057f0"), new uint256("0x10130e76efbf5f4cf093594430ea0d160728a3f3d6b5926887aaf7b674ad65b1")) },
-                { 20_000, new CheckpointInfo(new uint256("0xeb493db4b643a3cfbc5912bcda5296532ff1bccbdcb320b863698c63ecfea174"), new uint256("0xb35462fd7f43709f59efb0e7225d961c2e8a7569fc44102db5c99400ba9ad6bd")) },
-                { 30_000, new CheckpointInfo(new uint256("0x4d0f2a809ef915721ced21f5ec51b6177b684eee06cadd49bcedc57daa243b8b"), new uint256("0xd9b7f8c92f289d66cb35a517e0b5c11c3e7e23a6507ce8ba2f042642849dcba0")) },
-                { 40_000, new CheckpointInfo(new uint256("0xdc10671e67350eda9518b220e329ca9f661cd98c0e12d246471f8ec4f8a81c71"), new uint256("0xeb13622df7b0fc95068c0146d718bb2eaf2fd8943b3bea89396d8d58f5af8c15")) },
-                { 50_000, new CheckpointInfo(new uint256("0xe3398765bc0da5b481a5dfe60f0acf14f4b1fc8582bab8f7a166317aea9aa026"), new uint256("0x350db25ca3ff01ec589681c94c325f619e5013bdc06efcbefa981776f4dcca4f")) },
-                { 60_000, new CheckpointInfo(new uint256("0x9cbc20fd1720529c59073ade6f5511ab5c2cf168556c9a10cb41ff9d8dac724f"), new uint256("0xe363394313d2e1af248a1c0d18b79e6074a08884dddbebfca90e8ae716edb645")) },
-                { 150_000, new CheckpointInfo(new uint256("0x48bb4c2f08088da9990e23f19cb4b9a094bdf7791f86f77a98d08e5d2b06c1ce"), new uint256("0x14f80d627e7727f4da4a5945ddb77e2821369246c72f1c6ca754c6509a4eef60")) },
-                { 300_000, new CheckpointInfo(new uint256("0x35cb635c4f286b233fab6252c30f3df7813c0a76ca7ea2a90249cad73958e2d3"), new uint256("0x42e5a29b035296e3dee4f675f92c5790e0ac6cd0c9390fcf6bac9ac28ccaa850")) },
-                { 450_000, new CheckpointInfo(new uint256("0xc08db6151e2f341360a28e6a796d9c4356e14085e81aed2338c05f1964ef3e27"), new uint256("0x0cfc40a07819297a39be5460f805ce391d7f9b8d5794b18c97384a6b832deb4b")) },
-                { 600_000, new CheckpointInfo(new uint256("0xde6e45862b53aa12e68ebe1ce58962a35dc44c9b6357d6137d6f4d72a7799262"), new uint256("0xc1b1e2c3417c1d41e906a53028421bec3a1f8969cf38516671433c2c85ef09d3")) },
-                { 700_000, new CheckpointInfo(new uint256("0x9383c8d2cb72273ec784c8bca40fd8aedb5014080b30e664e7025f9733e28cd4"), new uint256("0x2a90ab7ce85e1733631282f9cc392aa8b6f8a352234a8c992d38ff1651b039af")) },
-                { 750_000, new CheckpointInfo(new uint256("0x16a24a00b59bf1f0a366be26f6da9bc12814f315cbaac6b536494555f065f5d0"), new uint256("0x54426d468d84dd4b54adbedf62458c175235e23af537876150853738b6adfacf")) }
+                { 0, new CheckpointInfo(new uint256("0x000000367112f710a0400b4b5d1ff42c376b3dffe753abcf0f0363571ebb8a65"), new uint256("0x0000000000000000000000000000000000000000000000000000000000000000")) }
             };
 
             this.Bech32Encoders = new Bech32Encoder[2];
-            var encoder = new Bech32Encoder("strax");
+            var encoder = new Bech32Encoder("xlc");
             this.Bech32Encoders[(int)Bech32Type.WITNESS_PUBKEY_ADDRESS] = encoder;
             this.Bech32Encoders[(int)Bech32Type.WITNESS_SCRIPT_ADDRESS] = encoder;
 
             this.DNSSeeds = new List<DNSSeedData>
             {
-                new DNSSeedData("straxmainnet1.stratisnetwork.com", "straxmainnet1.stratisnetwork.com"),
-                new DNSSeedData("straxmainnet2.stratisnetwork.com", "straxmainnet2.stratisnetwork.com")
+                new DNSSeedData("api.xels.io","api.xels.io"),
+                new DNSSeedData("mainnet.xels.io","mainnet.xels.io")
             };
 
             this.SeedNodes = new List<NetworkAddress>
             {
+                //new NetworkAddress(IPAddress.Parse("52.68.239.4"), this.DefaultPort ), // public node with DNS Server Enabled
+                //new NetworkAddress(IPAddress.Parse("54.64.43.45"), this.DefaultPort ), // public node with DNS Server Enabled
+                //new NetworkAddress(IPAddress.Parse("54.238.248.117"), this.DefaultPort), // public node
+                //new NetworkAddress(IPAddress.Parse("13.114.52.87"), this.DefaultPort), // public node
+                //new NetworkAddress(IPAddress.Parse("52.192.229.45"), this.DefaultPort), // public node
+                //new NetworkAddress(IPAddress.Parse("52.199.121.139"), this.DefaultPort ) // public node
             };
 
             this.StandardScriptsRegistry = new StraxStandardScriptsRegistry();
@@ -191,8 +167,8 @@ namespace Xels.Bitcoin.Networks
             Assert(this.DefaultBanTimeSeconds <= this.Consensus.MaxReorgLength * this.Consensus.TargetSpacing.TotalSeconds / 2);
 
             // TODO: Update these when the final block is mined
-            Assert(this.Consensus.HashGenesisBlock == uint256.Parse("0xebe158d09325c470276619ebc5f7f87c98c0ed4b211c46a17a6457655811d082"));
-            Assert(this.Genesis.Header.HashMerkleRoot == uint256.Parse("0xdd91e99b7ca5eb97d9c41b867762d1f2db412ba4331efb61d138fce5d39b9084"));
+            Assert(this.Consensus.HashGenesisBlock == uint256.Parse("0xf08ed070b9a5d324e667793ea7310101c6106242df6c7946798d73043a31a218"));
+            Assert(this.Genesis.Header.HashMerkleRoot == uint256.Parse("0x64637abf3dd01134a4c7038916396f5cabe26c64c14a41ddd633389a7f4c28c2"));
 
             StraxNetwork.RegisterRules(this.Consensus);
             StraxNetwork.RegisterMempoolRules(this.Consensus);

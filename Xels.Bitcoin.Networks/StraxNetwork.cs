@@ -17,10 +17,10 @@ namespace Xels.Bitcoin.Networks
         public const int XelsDefaultMaxTipAgeInSeconds = 2 * 60 * 60;
 
         /// <summary> The name of the root folder containing the different Xels blockchains (XelsMain, XelsTest, XelsRegTest). </summary>
-        public const string StraxRootFolderName = "strax";
+        public const string StraxRootFolderName = "xlc";
 
         /// <summary> The default name used for the Strax configuration file. </summary>
-        public const string StraxDefaultConfigFilename = "strax.conf";
+        public const string StraxDefaultConfigFilename = "xlc.conf";
 
         public static void RegisterRules(IConsensus consensus)
         {
