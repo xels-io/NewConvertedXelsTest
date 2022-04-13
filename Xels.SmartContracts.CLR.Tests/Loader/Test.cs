@@ -1,4 +1,6 @@
-﻿namespace Xels.SmartContracts.CLR.Tests.Loader
+﻿using Stratis.SmartContracts;
+
+namespace Xels.SmartContracts.CLR.Tests.Loader
 {
     public class Test : SmartContract
     {
